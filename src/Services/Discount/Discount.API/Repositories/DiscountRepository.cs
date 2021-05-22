@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Discount.API.Repositories
 {
-    public class DiscountRepository
+    public class DiscountRepository:IDiscountRepository
     {
         private readonly IConfiguration _configuration;
 
