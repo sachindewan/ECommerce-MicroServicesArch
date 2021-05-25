@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Basket.API.GrpcServices
 {
-    public class DiscountGrpcService:DiscountProtoService.DiscountProtoServiceClient
+    public class DiscountGrpcService
     {
         private readonly DiscountProtoService.DiscountProtoServiceClient _discountProtoService;
 
