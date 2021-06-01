@@ -52,7 +52,10 @@ namespace Ordering.API.Extensions
                                                     IServiceProvider services)
                                                     where TContext : DbContext
         {
-            context.Database.Migrate();
+            if (context.Database.GetPendingMigrations().Count() > 0)
+            {
+                context.Database.Migrate();
+            }
             seeder(context, services);
         }
     }
