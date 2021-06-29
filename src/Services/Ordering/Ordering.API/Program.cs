@@ -6,6 +6,7 @@ using Ordering.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
+using Common.Logging;
 
 namespace Ordering.API
 {
@@ -13,9 +14,8 @@ namespace Ordering.API
     {
         public static void Main(string[] args)
         {
-            ConfigureLogger();
-            Log.Information("Application started");
-            try {
+          
+       
                 CreateHostBuilder(args)
              .Build()
              .MigrateDatabase<OrderContext>((context, services) =>
@@ -26,32 +26,15 @@ namespace Ordering.API
                      .Wait();
              })
              .Run();
-            }
-            catch(Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-          
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+            .UseSerilog(SeriLogger.Configure)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>().UseSerilog();
+                    webBuilder.UseStartup<Startup>();
                 });
 
-
-        private static void ConfigureLogger()
-        {
-            Log.Logger = new LoggerConfiguration()
-                         .WriteTo.Console()
-                         .WriteTo.File(@"log.txt", Serilog.Events.LogEventLevel.Verbose,"{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
-                         .CreateLogger();
-        }
     }
 }
